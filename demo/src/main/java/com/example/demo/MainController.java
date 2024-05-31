@@ -11,4 +11,3 @@ public class MainController {
         return "index";  // src/main/resources/templates/index.html
     }
 }
- 
