@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/DataBase")
 public class KFC_DataBase {
-
     private DataBase db;
     @GetMapping("/images")
         public ResponseEntity<Object> getImages(@RequestParam(required = false) String mealId) {
@@ -61,13 +60,12 @@ public class KFC_DataBase {
             meals.add(meal);
         }
 
-        db = new DataBase("mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.6", "KFC-Data", "Meals");
-        ArrayList<String> contents = new ArrayList<>();
+        db = new DataBase();
         for (CouponMeal meal : meals) {
             meal.price = meal.price.replaceAll(",","");
-            Meal_Data test = new Meal_Data(meal.code, contents, meal.food_img_url, Integer.parseInt(meal.price) );
+            Meal_Data test = new Meal_Data(meal.code,"", meal.food_img_url, Integer.parseInt(meal.price));
             db.InsertMeals(test);
-            System.out.println(meal);
+            System.out.println(test.price);
         }
 
         return "crawler";
@@ -137,11 +135,11 @@ public class KFC_DataBase {
 
     public static class Meal_Data {
         private String meal_id;
-        private ArrayList<String> meal_content;
+        private String meal_content;
         private String meal_url;
         private int price;
 
-        Meal_Data(String meal_id, ArrayList<String> meal_content, String meal_url, int price) {
+        Meal_Data(String meal_id, String meal_content, String meal_url, int price) {
             this.meal_id = meal_id;
             this.meal_content = meal_content;
             this.meal_url = meal_url;
@@ -149,26 +147,23 @@ public class KFC_DataBase {
         }
 
         public String getID() { return this.meal_id; }
-        public ArrayList<String> getContent() { return this.meal_content; }
+        public String getContent() { return this.meal_content; }
         public String getURL() { return this.meal_url; }
         public int getPrice() { return this.price; }
     }
 
-    public static class DataBase {
-        private MongoClient mongoClient;
-        private MongoDatabase database;
-        private MongoCollection<Document> collection;
+    // db = new DataBase("mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.6", "KFC-Data", "Meals");
 
-        DataBase(String uri, String dbName, String collectionName) {
-            this.mongoClient = MongoClients.create(uri);
-            this.database = mongoClient.getDatabase(dbName);
-            this.collection = database.getCollection(collectionName);
-        }
+    public static class DataBase {
+        protected MongoClient mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
+        protected MongoDatabase database = mongoClient.getDatabase("KFC-Data");
+        protected MongoCollection<Document> collection = database.getCollection("Meals");
 
         public void InsertMeals(Meal_Data target) {
             Document doc = new Document("meal_id", target.getID())
                                .append("content", target.getContent())
-                               .append("meal_url", target.getURL());
+                               .append("meal_url", target.getURL())
+                               .append("price", target.getPrice());
             this.collection.insertOne(doc);
         }
     }

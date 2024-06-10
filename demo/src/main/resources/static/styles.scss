@@ -1,4 +1,3 @@
-@charset "UTF-8";
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -17,20 +16,20 @@ header {
   align-items: center;
   background-color: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0.25rem;
+  border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
   box-sizing: border-box;
   color: rgba(0, 0, 0, 0.85);
   cursor: pointer;
   display: inline-flex;
-  font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 20px;
   font-weight: 600;
   justify-content: center;
   line-height: 1.25;
   margin: 20px;
   min-height: 3rem;
-  padding: calc(0.875rem - 1px) calc(1.5rem - 1px);
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
   position: relative;
   text-decoration: none;
   transition: all 250ms;
@@ -59,21 +58,21 @@ header {
   color: rgba(0, 0, 0, 0.65);
   transform: translateY(0);
 }
-
 .active-button {
   background-color: #4CAF50; /* 鮮豔的綠色 */
   color: white;
 }
+
 
 #clock {
   font-size: 1.5em;
 }
 
 .img-responsive {
-  display: inline-block;
-  max-width: 15%; /* 根據需求調整圖片大小 */
-  height: auto; /* 保持圖片的寬高比 */
-  margin: 30px 0 30px 30px; /* 上下間距為 20px，左右居中 */
+display: inline-block;
+max-width: 15%;  /* 根據需求調整圖片大小 */
+height: auto;    /* 保持圖片的寬高比 */
+margin: 30px 0 30px 30px; /* 上下間距為 20px，左右居中 */
 }
 
 #dataOptions {
@@ -83,6 +82,9 @@ header {
   border-radius: 4px;
   background-color: white;
 }
+
+// Learn about this solution to creating custom select styles:
+// @link https://moderncss.dev/custom-select-styles-with-pure-css/
 
 *,
 *::before,
@@ -97,6 +99,7 @@ header {
 }
 
 select {
+  // A reset of styles, including removing the default dropdown arrow
   appearance: none;
   background-color: transparent;
   border: none;
@@ -107,11 +110,18 @@ select {
   font-size: inherit;
   cursor: inherit;
   line-height: inherit;
+
+  // Stack above custom arrow
   z-index: 1;
+
+  // Remove dropdown arrow in IE10 & IE11
+  // @link https://www.filamentgroup.com/lab/select-css.html
+  &::-ms-expand {
+    display: none;
+  }
+
+  // Remove focus outline, will add on alternate element
   outline: none;
-}
-select::-ms-expand {
-  display: none;
 }
 
 .select {
@@ -119,29 +129,40 @@ select::-ms-expand {
   grid-template-areas: "select";
   align-items: center;
   position: relative;
+
+  select,
+  &::after {
+    grid-area: select;
+  }
+
   min-width: 15ch;
   max-width: 30ch;
+
   border: 1px solid var(--select-border);
   border-radius: 0.25em;
   padding: 0.25em 0.5em;
+
   font-size: 1.25rem;
   cursor: pointer;
   line-height: 1.1;
+
+  // Optional styles
+  // remove for transparency
   background-color: #fff;
   background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
-}
-.select select, .select::after {
-  grid-area: select;
-}
-.select:not(.select--multiple)::after {
-  content: "";
-  justify-self: end;
-  width: 0.8em;
-  height: 0.5em;
-  background-color: var(--select-arrow);
-  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+
+  // Custom arrow
+  &:not(.select--multiple)::after {
+    content: "";
+    justify-self: end;
+    width: 0.8em;
+    height: 0.5em;
+    background-color: var(--select-arrow);
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  }
 }
 
+// Interim solution until :focus-within has better support
 select:focus + .focus {
   position: absolute;
   top: -1px;
@@ -154,6 +175,7 @@ select:focus + .focus {
 
 select[multiple] {
   padding-right: 0;
+
   /*
    * Safari will not reveal an option
    * unless the select height has room to 
@@ -162,15 +184,29 @@ select[multiple] {
    * a partial option
    */
   height: 6rem;
+
+  option {
+    white-space: normal;
+
+    // Only affects Chrome
+    outline-color: var(--select-focus);
+  }
+
   /* 
    * Experimental - styling of selected options
    * in the multiselect
    * Not supported crossbrowser
    */
-}
-select[multiple] option {
-  white-space: normal;
-  outline-color: var(--select-focus);
+  //   &:not(:disabled) option {
+  //     border-radius: 12px;
+  //     transition: 120ms all ease-in;
+
+  //     &:checked {
+  //       background: linear-gradient(hsl(242, 61%, 76%), hsl(242, 61%, 71%));
+  //       padding-left: 0.5em;
+  //       color: black !important;
+  //     }
+  //   }
 }
 
 .select--disabled {
@@ -188,6 +224,11 @@ label {
   margin-top: 2rem;
 }
 
+$primary: #1ff6e4;
+$secondary: #38ef7d;
+$white: #fff;
+$gray: #9b9b9b;
+$yellow: #f3e113;
 .form__group {
   position: relative;
   padding: 15px 0 0;
@@ -203,21 +244,23 @@ label {
   margin-left: auto;
   width: 100%;
   border: 0;
-  border-bottom: 2px solid #f3e113;
+  border-bottom: 2px solid $yellow;
   outline: 0;
   font-size: 1.3rem;
-  color: #fff;
+  color: $white;
   padding: 7px 0;
   background: transparent;
   transition: border-color 0.2s;
-}
-.form__field::placeholder {
-  color: transparent;
-}
-.form__field:placeholder-shown ~ .form__label {
-  font-size: 1.3rem;
-  cursor: text;
-  top: 20px;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:placeholder-shown ~ .form__label {
+    font-size: 1.3rem;
+    cursor: text;
+    top: 20px;
+  }
 }
 
 .form__label {
@@ -226,29 +269,26 @@ label {
   display: block;
   transition: 0.2s;
   font-size: 1rem;
-  color: #f3e113;
+  color: $yellow;
 }
 
 .form__field:focus {
-  padding-bottom: 6px;
+  ~ .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: $primary;
+    font-weight:700;  
+  }
+  padding-bottom: 6px;  
   font-weight: 700;
   border-width: 3px;
-  border-image: linear-gradient(to right, #1ff6e4, #38ef7d);
+  border-image: linear-gradient(to right, $primary,$secondary);
   border-image-slice: 1;
 }
-.form__field:focus ~ .form__label {
-  position: absolute;
-  top: 0;
-  display: block;
-  transition: 0.2s;
-  font-size: 1rem;
-  color: #1ff6e4;
-  font-weight: 700;
-}
-
 /* reset input */
-.form__field:required, .form__field:invalid {
-  box-shadow: none;
+.form__field{
+  &:required,&:invalid { box-shadow:none; }
 }
-
-/*# sourceMappingURL=styles.css.map */

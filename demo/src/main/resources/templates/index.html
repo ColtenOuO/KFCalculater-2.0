@@ -9,20 +9,31 @@
 <body>
     <header>
         <h1>KFCalculater-2.0</h1>
+        <button class="update-button topic-button" role="button">重新爬取資料</button>
+            <!-- 新增下拉式選單 -->
+            <div class="select">
+                <select id="standard-select">
+                  <option value="Option 1">列出含有所選品項的優惠代碼 (預設全部)</option>
+                  <option value="Option 2">列出所有預算內所有優惠代碼</option>
+                  <option value="Option 3">分配如何在預算內買到最多蛋塔</option>
+                  <option value="Option 4">分配如何在預算內買到最多炸雞</option>
+                </select>
+                <span class="focus"></span>
+            </div>
+            <div class="form__group field">
+                <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />
+                <label for="name" class="form__label">預算金額</label>
+            </div>
         <div id="clock"></div>
     </header>
-    <button class="topic-button toggleButton" role="button">蛋塔</button>
-    <button class="topic-button toggleButton" role="button">炸雞</button>
-    <button class="topic-button toggleButton" role="button">雞塊</button>
-    <button class="topic-button toggleButton" role="button">薯條</button>
-    <button class="topic-button toggleButton" role="button">雙色轉轉 QQ 球</button>
-    <img src="http://localhost:8080/images/fetch-image?image_url=https%3A%2F%2Fkfcoosfs.kfcclub.com.tw%2FOLO-coupon-40445-20230705.jpg" alt="Example Image" class="img-responsive">
-    <img src="http://localhost:8080/images/fetch-image?image_url=https%3A%2F%2Fkfcoosfs.kfcclub.com.tw%2FOLO-coupon-40426-20240119.jpg" alt="Example Image" class="img-responsive">
-    <img src="http://localhost:8080/images/fetch-image?image_url=https%3A%2F%2Fkfcoosfs.kfcclub.com.tw%2FOLO-coupon-40509-20240119.jpg" alt="Example Image" class="img-responsive">
-    <img src="http://localhost:8080/images/fetch-image?image_url=https://kfcoosfs.kfcclub.com.tw/OLO-coupon-40394-20221011.jpg" alt="Example Image" class="img-responsive">
-    <img src="http://localhost:8080/images/fetch-image?image_url=https://kfcoosfs.kfcclub.com.tw/OLO-coupon-50428.jpg" alt="Example Image" class="img-responsive">
+    <button class="topic-button toggleButton E" role="button">蛋塔</button>
+    <button class="topic-button toggleButton F" role="button">炸雞</button>
+    <button class="topic-button toggleButton C" role="button">雞塊</button>
+    <button class="topic-button toggleButton G" role="button">綠茶</button>
+    <button class="topic-button toggleButton Q" role="button">雙色轉轉 QQ 球</button>
+    <button class="topic-button toggleButton K" role="button">可樂</button>
 
-    <div id="imageContainer" class="img-responsive"></div>
+    <div id="imageContainer"></div>
 
     <script src="script.js"></script>
 </body>
