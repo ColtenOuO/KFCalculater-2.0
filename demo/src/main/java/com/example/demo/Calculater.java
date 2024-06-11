@@ -396,8 +396,86 @@ public class Calculater {
                 }
             });
         }
-    }
+        public List<String> getAdvance(int req) {
+            if( req == 0 ) return null;
+            List<String> target_url = new ArrayList<>();
+            List<Integer> all_item = new ArrayList<>();
+            List<Integer> price_list = new ArrayList<>();
+            List<String> all_url = new ArrayList<>();
+            for( Document document : documents ) {
+                String content = document.getString("content");
+                int price = document.getInteger("price");
+                String url = document.getString("meal_url");
+                int sp_number = 0;
+                for(int i=0;i<content.length();i++) {
+                    // QECGFKR
+                    if( content.charAt(i) == 'Q' ) sp_number += ( 1 << 0 );
+                    if( content.charAt(i) == 'E' ) sp_number += ( 1 << 1 );
+                    if( content.charAt(i) == 'C' ) sp_number += ( 1 << 2 );
+                    if( content.charAt(i) == 'G' ) sp_number += ( 1 << 3 );
+                    if( content.charAt(i) == 'F' ) sp_number += ( 1 << 4 );
+                    if( content.charAt(i) == 'K' ) sp_number += ( 1 << 5 );
+                    if( content.charAt(i) == 'R' ) sp_number += ( 1 << 6 );
+                }
 
+                all_item.add(sp_number);
+                all_url.add(url);
+                price_list.add(price);
+            }
+
+            int[] dp = new int[(1<<7)];
+            for(int i=0;i<(1<<7);i++) dp[i] = -1;
+            int[] last_idx = new int[(1<<7)];
+            int[] take_meal = new int[(1<<7)];
+            dp[0] = 0;
+            for(int i=0;i<(1<<6);i++) {
+                for(int j=0;j<all_item.size();j++) {
+                    int number = all_item.get(j);
+                    int price = price_list.get(j);
+                    if( dp[i] != -1 && ( dp[i] + price < dp[i|number] || dp[i|number] == -1 ) ) {
+                        dp[i|number] = dp[i] + price;
+                        last_idx[i|number] = i;
+                        take_meal[i|number] = j;
+                    }
+                }
+            }
+
+            int ans = (int)1e9, idx = -1;
+            for(int i=0;i<(1<<6);i++) {
+                if( ( i & req ) == req && ans > dp[i] && dp[i] != -1 ) {
+                    ans = dp[i];
+                    idx = i;
+                }
+            }
+
+            if( idx == -1 || ans > req_money ) return null;
+            while( idx != 0 ) {
+                target_url.add(all_url.get(take_meal[idx]));
+                idx = last_idx[idx];
+            }
+
+            return target_url;
+        }
+    }
+    @GetMapping("/meal_advance")
+    public ResponseEntity<Object> CalculaterMeal_Advance(@RequestParam("meal_char") String content, 
+    @RequestParam("money") int money) {
+        KFCalculater calculater = new KFCalculater(content, money);
+        int sp_number = 0;
+        for(int i=0;i<content.length();i++) {
+            // QECGFKR
+            if( content.charAt(i) == 'Q' ) sp_number += ( 1 << 0 );
+            if( content.charAt(i) == 'E' ) sp_number += ( 1 << 1 );
+            if( content.charAt(i) == 'C' ) sp_number += ( 1 << 2 );
+            if( content.charAt(i) == 'G' ) sp_number += ( 1 << 3 );
+            if( content.charAt(i) == 'F' ) sp_number += ( 1 << 4 );
+            if( content.charAt(i) == 'K' ) sp_number += ( 1 << 5 );
+            if( content.charAt(i) == 'R' ) sp_number += ( 1 << 6 );
+        }
+        List<String> mealList = calculater.getAdvance(sp_number);
+        calculater.mongoClient.close();
+        return ResponseEntity.ok(mealList);
+    }
     @GetMapping("/req_meal")
     public ResponseEntity<Object> CalculaterMeal(@RequestParam("meal_char") String meal_char) {
         KFCalculater calculater = new KFCalculater(meal_char, 0);
@@ -443,7 +521,6 @@ public class Calculater {
     }
     @GetMapping("/delete")
     public void delete() {
-        List<String> mealList = new ArrayList<>();
         KFCalculater calculater = new KFCalculater("", 0);
         calculater.delete_db();
         calculater.mongoClient.close();

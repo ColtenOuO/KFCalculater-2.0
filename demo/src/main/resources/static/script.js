@@ -60,7 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
             activeButtons.forEach( choose_button => {
                 click_button += choose_button.classList[2];
             })
-            if( click_button === "" ) { imageContainer.innerHTML = ''; listAll(); }
+            var selectElement = document.getElementById('standard-select');
+            if( selectElement.value === "Option 7" ) { Option7(); }
+            else if( click_button === "" ) { imageContainer.innerHTML = ''; listAll(); }
             else {
                 imageContainer.innerHTML = '';
                 fetch('http://127.0.0.1:8080/calculater/req_meal?meal_char=' + click_button )
@@ -163,6 +165,28 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
     }
+    function Option7() {
+        var money = document.getElementById('name');
+        var click_button = "";
+        const activeButtons = document.querySelectorAll('.active-button');
+            activeButtons.forEach( choose_button => {
+                click_button += choose_button.classList[2];
+        })
+        fetch('http://127.0.0.1:8080/calculater/meal_advance?meal_char=' + encodeURIComponent(click_button) + '&money=' + encodeURIComponent(money.value))
+        .then( response => response.json() )
+        .then( data => {
+                const imageContainer = document.getElementById('imageContainer');
+                imageContainer.innerHTML = '';
+                data.forEach(imageUrl => {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = 'Example Image';
+                img.className = 'img-responsive';
+                imageContainer.appendChild(img);
+            });
+        })
+        
+    }
 
     var selectElement = document.getElementById('standard-select');
     selectElement.addEventListener('change', function() {
@@ -173,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
         else if( selectedValue === "Option 4" ) { Option4(); }
         else if( selectedValue === "Option 5" ) { Option5(); }
         else if( selectedValue === "Option 6" ) { Option6(); }
+        else if( selectedValue === "Option 7" ) { Option7(); }
     });
 
     const inputBox = document.getElementById('name');
@@ -182,6 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if( selectElement.value === "Option 4" ) { Option4(); }
         if( selectElement.value === "Option 5" ) { Option5(); }
         if( selectElement.value === "Option 6" ) { Option6(); }
+        if( selectElement.value === "Option 7" ) { Option7(); }
     })
 
     updateClock();
