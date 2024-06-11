@@ -131,6 +131,38 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
     }
+    function Option5() {
+        var money = document.getElementById('name');
+        fetch('http://127.0.0.1:8080/calculater/req_danta_nolimit?money=' + money.value )
+        .then( response => response.json() )
+        .then( data => {
+                const imageContainer = document.getElementById('imageContainer');
+                imageContainer.innerHTML = '';
+                data.forEach(imageUrl => {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = 'Example Image';
+                img.className = 'img-responsive';
+                imageContainer.appendChild(img);
+            });
+        })
+    }
+    function Option6() {
+        var money = document.getElementById('name');
+        fetch('http://127.0.0.1:8080/calculater/req_chicken_nolimit?money=' + money.value )
+        .then( response => response.json() )
+        .then( data => {
+                const imageContainer = document.getElementById('imageContainer');
+                imageContainer.innerHTML = '';
+                data.forEach(imageUrl => {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = 'Example Image';
+                img.className = 'img-responsive';
+                imageContainer.appendChild(img);
+            });
+        })
+    }
 
     var selectElement = document.getElementById('standard-select');
     selectElement.addEventListener('change', function() {
@@ -139,13 +171,17 @@ document.addEventListener('DOMContentLoaded', function() {
         else if( selectedValue === "Option 2" ) { Option2(); }
         else if( selectedValue === "Option 3" ) { Option3(); }
         else if( selectedValue === "Option 4" ) { Option4(); }
+        else if( selectedValue === "Option 5" ) { Option5(); }
+        else if( selectedValue === "Option 6" ) { Option6(); }
     });
 
     const inputBox = document.getElementById('name');
     inputBox.addEventListener('input', function() {
-        if( selectElement.value === "Option 2" ) {
-            Option2();
-        }
+        if( selectElement.value === "Option 2" ) { Option2(); }
+        if( selectElement.value === "Option 3" ) { Option3(); }
+        if( selectElement.value === "Option 4" ) { Option4(); }
+        if( selectElement.value === "Option 5" ) { Option5(); }
+        if( selectElement.value === "Option 6" ) { Option6(); }
     })
 
     updateClock();

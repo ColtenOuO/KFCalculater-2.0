@@ -38,7 +38,7 @@ header {
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: baseline;
-  width: 250px;
+  width: 200px;
 }
 
 .topic-button:hover,
